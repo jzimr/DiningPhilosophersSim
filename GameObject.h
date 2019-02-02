@@ -1,10 +1,15 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+/*
+	Base Class of all gameobjects.
+	E.g: Philosopher -> Entity -> GameObject
+*/
+
 class GameObject : public sf::Transformable, public sf::Drawable, public sf::NonCopyable
 {
 public:
-	GameObject();
+								GameObject();
 	void						update(float dt);
 	void						attachChild(GameObject* child);
 	GameObject*					detachChild(const GameObject& node);		//	Returns the child after detaching it
