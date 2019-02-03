@@ -8,6 +8,8 @@
 #include <vector>
 #include "Philosopher.h"
 #include "Food.h"
+#include "Chopstick.h"
+#include <thread>
 
 const float PI = 3.14159265f;
 const int WINDOW_X = 1280;
@@ -30,9 +32,15 @@ private:
 	void						loadTextures();
 	void						buildScene();
 
+	void						startSim();						
+
 private:
-	std::vector<GameObject*>	philosophers;
+	std::vector<Philosopher*>	philosophers;
 	std::vector<GameObject*>	chopsticks;
+	std::vector<GameObject*>	foods;
+	std::vector<std::thread>	threads;
+
+	int							philAmount;		/* number of philosophers */
 	
 	sf::Vector2f				tablePos;		/* temp */
 	float						tableRadius;	/* temp */
