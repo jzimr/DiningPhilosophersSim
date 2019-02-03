@@ -5,9 +5,13 @@ Sim::Sim()
 	, topNode()
 	, mTextures()
 	, mView(mWindow.getDefaultView())
+	, tablePos(RESOLUTION_X / 2.f, RESOLUTION_Y / 2.f)
 {
 	mView.setSize(RESOLUTION_X, RESOLUTION_Y);
-	mView.setCenter(200, 200);
+	mView.setCenter(RESOLUTION_X / 2.f, RESOLUTION_Y /2.f);
+	mWindow.setFramerateLimit(120);		/* 120 FPS to limit GPU usage */
+
+	tableRadius = 100;
 
 	loadTextures();
 	buildScene();
@@ -70,16 +74,39 @@ void Sim::render()
 void Sim::loadTextures()
 {
 	mTextures.load("Chopstick", "Media/chopstick.png");
-	mTextures.load("Face", "Media/face.png");
+	mTextures.load("Philosopher", "Media/face.png");
+	mTextures.load("Food", "Media/food.png");
 }
 
 void Sim::buildScene()
 {
-	SpriteNode* chopstick = new SpriteNode(mTextures.get("Chopstick"));
-	topNode.attachChild(chopstick);
-	chopstick->setPosition(200, 200);
+	/* 
+	Set up scene
+	*/
+	sf::Vector2f mid = sf::Vector2f(RESOLUTION_X / 2.f, RESOLUTION_Y / 2.f);
+	int philAmount = 5;		/* Amount of philosophers */
 
-	SpriteNode* face = new SpriteNode(mTextures.get("Face"));
-	topNode.attachChild(face);
-	face->setPosition(250, 200);
+	for (int i = 0; i < philAmount; i++)
+	{
+		Philosopher* phil = new Philosopher(mTextures);
+		philosophers.push_back(phil);
+		topNode.attachChild(phil);
+
+		float degree = i * (360.f / philAmount);
+		phil->setPosition(tablePos.x + (cos(degree * PI / 180.0) * tableRadius), tablePos.y + (sin(degree * PI / 180.0) * tableRadius));
+		
+
+		Food* food = new Food(mTextures);
+		topNode.attachChild(food);
+
+		food->setPosition(tablePos.x + (cos(degree * PI / 180.0) * (tableRadius/2)), tablePos.y + (sin(degree * PI / 180.0) * (tableRadius/2)));
+
+
+		SpriteNode* chops = new SpriteNode(mTextures.get("Chopstick"));
+		topNode.attachChild(chops);
+		chops->setRotation(degree-13);		/* -13 to fine adjust the sprite */
+
+		degree = degree + (360.f / philAmount / 2);
+		chops->setPosition(tablePos.x + (cos(degree * PI / 180.0) * tableRadius), tablePos.y + (sin(degree * PI / 180.0) * tableRadius));
+	}
 }

@@ -5,7 +5,11 @@
 #include "GameObject.h"
 #include "TextureHolder.h"
 #include "SpriteNode.h"
+#include <vector>
+#include "Philosopher.h"
+#include "Food.h"
 
+const float PI = 3.14159265f;
 const int WINDOW_X = 1280;
 const int WINDOW_Y = 720;
 const int RESOLUTION_X = 480;
@@ -27,7 +31,13 @@ private:
 	void						buildScene();
 
 private:
-	GameObject					topNode;	/* Pater familias of all gameobjects */
+	std::vector<GameObject*>	philosophers;
+	std::vector<GameObject*>	chopsticks;
+	
+	sf::Vector2f				tablePos;		/* temp */
+	float						tableRadius;	/* temp */
+
+	GameObject					topNode;	/* Top ancestor of all gameobjects */
 
 	sf::RenderWindow			mWindow;
 	sf::View					mView;

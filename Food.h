@@ -2,19 +2,14 @@
 #include "Entity.h"
 #include "TextureHolder.h"
 
-class Philosopher : public Entity
+class Food : public Entity
 {
 public:
-	explicit					Philosopher(const TextureHolder<std::string> &th);
-	/*
-	void						eat();
-	void						think();
-	*/
-
+	Food(const TextureHolder<std::string> &th);
 
 private:
 	void						drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
-	
+
 private:
 	sf::Sprite mSprite;
 };
