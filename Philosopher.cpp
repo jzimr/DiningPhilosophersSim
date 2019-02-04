@@ -1,10 +1,13 @@
 #include "Philosopher.h"
+#include "Chopstick.h"
+#include "Food.h"
 
 Philosopher::Philosopher(const TextureHolder<std::string> &th, int id, Food* food, int philAm)
 	:mSprite(th.get("Philosopher"))
 	,mId(id)
 	,mFood(food)
 	,philAmount(philAm)
+	, lastState(THINKING)
 {
 	this->setOrigin(mSprite.getLocalBounds().height / 2, mSprite.getLocalBounds().width / 2);
 }
@@ -59,21 +62,28 @@ bool Philosopher::test()
 	return false;
 }
 
-void Philosopher::updateCurrent(sf::Time dt)
+void Philosopher::updateCurrent(float dt)
 {
 	if (lastState != state[mId])	/* If state of philosopher has changed since last check */
 	{
 		lastState = state[mId];		
 
-		spriteMtx.lock();			/* Enter critical region of sprite */
+		//spriteMtx.lock();			/* Enter critical region of sprite */
 
-		// TODO
 		switch (state[mId])
 		{
 		case EATING:
-			//TODO
+			chopsticks[LEFT]->moveTowards(mFood, 100);
+			chopsticks[mId]->moveTowards(mFood, 100);
+			std::cout << "EATING! ID: " << mId << " | " << LEFT << ' ' << mId << '\n';
+			break;
+		case THINKING:
+			chopsticks[LEFT]->resetPos(200);
+			chopsticks[mId]->resetPos(200);
+			//std::cout << "LEAVING! ID: " << mId << " | " << LEFT << ' ' << mId << '\n';
 			break;
 		}
+		//spriteMtx.unlock();			/* Exit critical region */
 	}
 
 
@@ -82,9 +92,9 @@ void Philosopher::updateCurrent(sf::Time dt)
 
 void Philosopher::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	spriteMtx.lock();
+	//spriteMtx.lock();
 	target.draw(mSprite, states);
-	spriteMtx.unlock();
+	//spriteMtx.unlock();
 }
 
 // Initialize static members of class

@@ -95,18 +95,20 @@ void Sim::buildScene()
 		topNode.attachChild(food);
 		food->setPosition(tablePos.x + (cos(degree * PI / 180.0) * (tableRadius / 2)), tablePos.y + (sin(degree * PI / 180.0) * (tableRadius / 2)));
 
+
 		Philosopher* phil = new Philosopher(mTextures, i, food, PHIL_AMOUNT);
 		philosophers.push_back(phil);
 		topNode.attachChild(phil);
 		phil->setPosition(tablePos.x + (cos(degree * PI / 180.0) * tableRadius), tablePos.y + (sin(degree * PI / 180.0) * tableRadius));
 
 
-		SpriteNode* chops = new SpriteNode(mTextures.get("Chopstick"));
+		Chopstick* chops = new Chopstick(mTextures);
+		chopsticks.push_back(chops);
 		topNode.attachChild(chops);
 		chops->setRotation(degree - 15);		/* -15 to fine adjust the sprite */
-
 		degree = degree + (360.f / PHIL_AMOUNT / 2);
 		chops->setPosition(tablePos.x + (cos(degree * PI / 180.0) * (tableRadius / 1.7)), tablePos.y + (sin(degree * PI / 180.0) * (tableRadius / 1.7)));
+		chops->setSpawn(chops->getPosition());
 	}
 }
 

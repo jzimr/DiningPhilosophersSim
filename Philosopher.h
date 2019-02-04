@@ -30,7 +30,7 @@ private:
 
 
 private:
-	void						updateCurrent(sf::Time dt);
+	void						updateCurrent(float dt);
 	void						drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
 public:
