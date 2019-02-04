@@ -12,7 +12,7 @@ Sim::Sim()
 	mWindow.setFramerateLimit(120);		/* 120 FPS to limit GPU usage */
 
 	tableRadius = 100;
-	philAmount = 5;
+	PHIL_AMOUNT = 5;
 
 	loadTextures();
 	buildScene();
@@ -87,36 +87,38 @@ void Sim::buildScene()
 	*/
 	sf::Vector2f mid = sf::Vector2f(RESOLUTION_X / 2.f, RESOLUTION_Y / 2.f);
 
-	for (int i = 0; i < philAmount; i++)
+	for (int i = 0; i < PHIL_AMOUNT; i++)
 	{
-		Philosopher* phil = new Philosopher(mTextures);
-		philosophers.push_back(phil);
-		topNode.attachChild(phil);
-
-		float degree = i * (360.f / philAmount);
-		phil->setPosition(tablePos.x + (cos(degree * PI / 180.0) * tableRadius), tablePos.y + (sin(degree * PI / 180.0) * tableRadius));
-
+		float degree = i * (360.f / PHIL_AMOUNT);
 
 		Food* food = new Food(mTextures);
 		topNode.attachChild(food);
-
 		food->setPosition(tablePos.x + (cos(degree * PI / 180.0) * (tableRadius / 2)), tablePos.y + (sin(degree * PI / 180.0) * (tableRadius / 2)));
+
+		Philosopher* phil = new Philosopher(mTextures, i, food, PHIL_AMOUNT);
+		philosophers.push_back(phil);
+		topNode.attachChild(phil);
+		phil->setPosition(tablePos.x + (cos(degree * PI / 180.0) * tableRadius), tablePos.y + (sin(degree * PI / 180.0) * tableRadius));
 
 
 		SpriteNode* chops = new SpriteNode(mTextures.get("Chopstick"));
 		topNode.attachChild(chops);
 		chops->setRotation(degree - 15);		/* -15 to fine adjust the sprite */
 
-		degree = degree + (360.f / philAmount / 2);
+		degree = degree + (360.f / PHIL_AMOUNT / 2);
 		chops->setPosition(tablePos.x + (cos(degree * PI / 180.0) * (tableRadius / 1.7)), tablePos.y + (sin(degree * PI / 180.0) * (tableRadius / 1.7)));
 	}
 }
 
 void Sim::startSim()
 {
+	Philosopher::chopsticks = chopsticks;
+	Philosopher::state = std::vector<int>(PHIL_AMOUNT);
+	std::fill(Philosopher::state.begin(), Philosopher::state.begin() + PHIL_AMOUNT, THINKING);
+
 	// Spawn a thread for each philosopher
-	for (int i = 0; i < philAmount; i++)
+	for (int i = 0; i < PHIL_AMOUNT; i++)
 	{
-		threads.push_back(std::thread(&Philosopher::philosopher, philosophers[i]));
+		threads.push_back(std::thread(&Philosopher::philosopher, philosophers[i], MAX_RUNS));
 	}
 }

@@ -36,11 +36,13 @@ private:
 
 private:
 	std::vector<Philosopher*>	philosophers;
-	std::vector<GameObject*>	chopsticks;
-	std::vector<GameObject*>	foods;
+	std::vector<Chopstick*>		chopsticks;
+	std::vector<Food*>			foods;
 	std::vector<std::thread>	threads;
 
-	int							philAmount;		/* number of philosophers */
+	/* Settings of the simulation */
+	int PHIL_AMOUNT = 5;		/* number of philosophers */
+	int MAX_RUNS = 10;		/* in total how often is eaten */
 	
 	sf::Vector2f				tablePos;		/* temp */
 	float						tableRadius;	/* temp */
