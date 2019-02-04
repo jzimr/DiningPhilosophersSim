@@ -25,7 +25,7 @@ void Philosopher::philosopher(int maxRuns)
 void Philosopher::takeForks()
 {
 	bool gotForks = false;
-	std::unique_lock<std::mutex> lock(mutex);					/* enter critical region */
+	std::unique_lock<std::mutex> lock(diningMtx);					/* enter critical region */
 	state[mId] = HUNGRY;
 	std::cout << "Philosopher " << mId << " is now hungry\n";
 	gotForks = test();
@@ -41,7 +41,7 @@ void Philosopher::takeForks()
 
 void Philosopher::putForks()
 {
-	std::unique_lock<std::mutex> lock(mutex);				/* enter critical region */
+	std::unique_lock<std::mutex> lock(diningMtx);				/* enter critical region */
 	state[mId] = THINKING;									/* philosopher has finished eating */
 	std::cout << "Philosopher " << mId << " is now thinking\n";
 	totalRuns++;
@@ -59,19 +59,37 @@ bool Philosopher::test()
 	return false;
 }
 
+void Philosopher::updateCurrent(sf::Time dt)
+{
+	if (lastState != state[mId])	/* If state of philosopher has changed since last check */
+	{
+		lastState = state[mId];		
+
+		spriteMtx.lock();			/* Enter critical region of sprite */
+
+		// TODO
+		switch (state[mId])
+		{
+		case EATING:
+			//TODO
+			break;
+		}
+	}
 
 
-
-
+	//move(getVelocity() * dt.asSeconds());
+}
 
 void Philosopher::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	spriteMtx.lock();
 	target.draw(mSprite, states);
+	spriteMtx.unlock();
 }
 
 // Initialize static members of class
 std::vector<Chopstick*> Philosopher::chopsticks;
 int Philosopher::totalRuns = 0;
 std::vector<int> Philosopher::state;
-std::mutex Philosopher::mutex;
+std::mutex Philosopher::diningMtx;
 std::condition_variable Philosopher::cv;

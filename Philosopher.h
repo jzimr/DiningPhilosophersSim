@@ -30,6 +30,7 @@ private:
 
 
 private:
+	void						updateCurrent(sf::Time dt);
 	void						drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
 public:
@@ -38,15 +39,17 @@ public:
 
 private:
 	sf::Sprite mSprite;		// TODO!! Mutex on this variable
+	mutable std::mutex spriteMtx;	// Mutex for accesing the mSprite variable
+	
 	int mId;
 	int philAmount;
+
+	int lastState;			/* The last recorded state of our philosopher */
 
 	static int totalRuns;
 
 	Food* mFood;
 
-
-	static std::mutex mutex;
-	static std::condition_variable cv; //if this doesn't work, create array as below
-	//static std::vector<std::mutex> s;
+	static std::mutex diningMtx;
+	static std::condition_variable cv;
 };
