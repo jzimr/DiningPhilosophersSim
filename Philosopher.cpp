@@ -4,9 +4,9 @@
 
 Philosopher::Philosopher(const TextureHolder<std::string> &th, int id, Food* food, int philAm)
 	:mSprite(th.get("Philosopher"))
-	,mId(id)
-	,mFood(food)
-	,philAmount(philAm)
+	, mId(id)
+	, mFood(food)
+	, philAmount(philAm)
 	, lastState(THINKING)
 {
 	this->setOrigin(mSprite.getLocalBounds().height / 2, mSprite.getLocalBounds().width / 2);
@@ -66,38 +66,34 @@ void Philosopher::updateCurrent(float dt)
 {
 	if (lastState != state[mId])	/* If state of philosopher has changed since last check */
 	{
-		lastState = state[mId];		
+		/* Check first if neighboring chopsticks are available (Fixes a god damn bug that has kept me in agony for days) */
+		if (lastState == HUNGRY &&
+			(!chopsticks[LEFT]->isAvailable() || !chopsticks[mId]->isAvailable()))
+			return;
 
-		//spriteMtx.lock();			/* Enter critical region of sprite */
+		/* Update philosopher's state */
+		lastState = state[mId];
 
-		switch (state[mId])
+		switch (lastState)
 		{
 		case EATING:
 			chopsticks[LEFT]->moveTowards(mFood, 100);
 			chopsticks[mId]->moveTowards(mFood, 100);
-			std::cout << "EATING! ID: " << mId << " | " << LEFT << ' ' << mId << '\n';
 			break;
 		case THINKING:
-			chopsticks[LEFT]->resetPos(200);
-			chopsticks[mId]->resetPos(200);
-			//std::cout << "LEAVING! ID: " << mId << " | " << LEFT << ' ' << mId << '\n';
+			chopsticks[LEFT]->resetPos(100);
+			chopsticks[mId]->resetPos(100);
 			break;
 		}
-		//spriteMtx.unlock();			/* Exit critical region */
 	}
-
-
-	//move(getVelocity() * dt.asSeconds());
 }
 
 void Philosopher::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	//spriteMtx.lock();
 	target.draw(mSprite, states);
-	//spriteMtx.unlock();
 }
 
-// Initialize static members of class
+/* Initialize static members of class */
 std::vector<Chopstick*> Philosopher::chopsticks;
 int Philosopher::totalRuns = 0;
 std::vector<int> Philosopher::state;

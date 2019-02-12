@@ -41,8 +41,8 @@ private:
 	std::vector<std::thread>	threads;
 
 	/* Settings of the simulation */
-	int PHIL_AMOUNT = 5;		/* number of philosophers */
-	int MAX_RUNS = 10;		/* in total how often is eaten */
+	int PHIL_AMOUNT = 7;		/* number of philosophers */
+	int MAX_RUNS = 10;			/* in total how often is eaten */
 	
 	sf::Vector2f				tablePos;		/* temp */
 	float						tableRadius;	/* temp */

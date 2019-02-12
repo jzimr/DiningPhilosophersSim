@@ -25,9 +25,9 @@ void Chopstick::moveTowards(sf::Vector2f goal, float speed)
 
 	setVelocity(vx * speed, vy * speed);
 
-	std::cout << vx << ", " << vy << " | " << mGoal.x << ", " << mGoal.y << 
+	/* std::cout << vx << ", " << vy << " | " << mGoal.x << ", " << mGoal.y << 
 		" | " << getPosition().x << ", " << getPosition().y << " | " 
-		<< direction.x << ", " << direction.y << '\n';
+		<< direction.x << ", " << direction.y << '\n'; */
 }
 
 void Chopstick::setSpawn(sf::Vector2f spawn)
@@ -37,7 +37,13 @@ void Chopstick::setSpawn(sf::Vector2f spawn)
 
 void Chopstick::resetPos(float speed)
 {
+	//setPosition(mSpawn);
 	moveTowards(mSpawn, speed);
+}
+
+bool Chopstick::isAvailable()
+{
+	return getPosition() == mSpawn;
 }
 
 void Chopstick::updateCurrent(float dt)
@@ -52,8 +58,9 @@ void Chopstick::updateCurrent(float dt)
 		(getVelocity().y < 0 && getPosition().y < mGoal.y)))
 	{
 		setVelocity(0, 0);
+		//std::cout << "-----======>>> " << mGoal.x << ", " << mGoal.y << '\n';
 
-		//setPosition(mGoal);
+		setPosition(mGoal);
 	}
 	
 }

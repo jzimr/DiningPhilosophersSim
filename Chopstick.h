@@ -11,6 +11,7 @@ public:
 	void						moveTowards(sf::Vector2f goal, float speed);
 	void						setSpawn(sf::Vector2f spawn);
 	void						resetPos(float speed);
+	bool						isAvailable();			// Chopstick is currently not in use											
 
 private:
 	void						updateCurrent(float dt);

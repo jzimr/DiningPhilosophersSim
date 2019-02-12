@@ -12,7 +12,6 @@ Sim::Sim()
 	mWindow.setFramerateLimit(120);		/* 120 FPS to limit GPU usage */
 
 	tableRadius = 100;
-	PHIL_AMOUNT = 5;
 
 	loadTextures();
 	buildScene();
@@ -94,7 +93,6 @@ void Sim::buildScene()
 		Food* food = new Food(mTextures);
 		topNode.attachChild(food);
 		food->setPosition(tablePos.x + (cos(degree * PI / 180.0) * (tableRadius / 2)), tablePos.y + (sin(degree * PI / 180.0) * (tableRadius / 2)));
-
 
 		Philosopher* phil = new Philosopher(mTextures, i, food, PHIL_AMOUNT);
 		philosophers.push_back(phil);
