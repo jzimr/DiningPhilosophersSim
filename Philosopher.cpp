@@ -3,11 +3,12 @@
 #include "Food.h"
 
 Philosopher::Philosopher(const TextureHolder<std::string> &th, int id, Food* food, int philAm)
-	:mSprite(th.get("Philosopher"))
+	:mSprite(th.get("PhilThinking"))
 	, mId(id)
 	, mFood(food)
 	, philAmount(philAm)
 	, lastState(THINKING)
+	, mth{ th }
 {
 	this->setOrigin(mSprite.getLocalBounds().height / 2, mSprite.getLocalBounds().width / 2);
 }
@@ -17,32 +18,27 @@ void Philosopher::philosopher(int maxRuns)
 	while (totalRuns < maxRuns)
 	{
 		// TODO: Add randomness to sleep function
-		std::this_thread::sleep_for(std::chrono::seconds(2));	/* philosopher is thinking */
-		takeForks();											/* aquire two chopsticks or block */
-		std::this_thread::sleep_for(std::chrono::seconds(3));	/* yum-yum, spaghetti */
-		putForks();												/* put chopsticks back on table */
+		std::this_thread::sleep_for(std::chrono::seconds(3));	/* philosopher is thinking */
+		takeChopsticks();											/* aquire two chopsticks or block */
+		std::this_thread::sleep_for(std::chrono::seconds(4));	/* yum-yum, spaghetti */
+		putChopsticks();												/* put chopsticks back on table */
 	}
 	return;
 }
 
-void Philosopher::takeForks()
+void Philosopher::takeChopsticks()
 {
-	bool gotForks = false;
 	std::unique_lock<std::mutex> lock(diningMtx);					/* enter critical region */
 	state[mId] = HUNGRY;
 	std::cout << "Philosopher " << mId << " is now hungry\n";
-	gotForks = test();
 
-	while (!gotForks)
-	{
+	while (!test())				/* loop until chopsticks are available for grab */
 		cv.wait(lock);			/* sleep until someone has finished eating */
-		gotForks = test();		/* see if chopsticks are available */
-	}
 
 	lock.unlock();				/* exit critical region */
 }
 
-void Philosopher::putForks()
+void Philosopher::putChopsticks()
 {
 	std::unique_lock<std::mutex> lock(diningMtx);				/* enter critical region */
 	state[mId] = THINKING;									/* philosopher has finished eating */
@@ -53,7 +49,7 @@ void Philosopher::putForks()
 
 bool Philosopher::test()
 {
-	if (state[mId] == HUNGRY && state[LEFT] != EATING && state[RIGHT] != EATING)
+	if (state[mId] == HUNGRY && state[P_LEFT] != EATING && state[P_RIGHT] != EATING)
 	{
 		state[mId] = EATING;
 		std::cout << "Philosopher " << mId << " is now eating\n";
@@ -68,7 +64,7 @@ void Philosopher::updateCurrent(float dt)
 	{
 		/* Check first if neighboring chopsticks are available (Fixes a god damn bug that has kept me in agony for days) */
 		if (lastState == HUNGRY &&
-			(!chopsticks[LEFT]->isAvailable() || !chopsticks[mId]->isAvailable()))
+			(!chopsticks[P_LEFT]->isAvailable() || !chopsticks[mId]->isAvailable()))
 			return;
 
 		/* Update philosopher's state */
@@ -77,12 +73,17 @@ void Philosopher::updateCurrent(float dt)
 		switch (lastState)
 		{
 		case EATING:
-			chopsticks[LEFT]->moveTowards(mFood, 100);
+			mSprite.setTexture(mth.get("PhilEating"));
+			chopsticks[P_LEFT]->moveTowards(mFood, 100);
 			chopsticks[mId]->moveTowards(mFood, 100);
 			break;
 		case THINKING:
-			chopsticks[LEFT]->resetPos(100);
+			mSprite.setTexture(mth.get("PhilThinking"));
+			chopsticks[P_LEFT]->resetPos(100);
 			chopsticks[mId]->resetPos(100);
+			break;
+		case HUNGRY:
+			mSprite.setTexture(mth.get("PhilHungry"));
 			break;
 		}
 	}

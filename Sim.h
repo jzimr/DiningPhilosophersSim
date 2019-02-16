@@ -41,16 +41,19 @@ private:
 	std::vector<std::thread>	threads;
 
 	/* Settings of the simulation */
-	int PHIL_AMOUNT = 7;		/* number of philosophers */
-	int MAX_RUNS = 10;			/* in total how often is eaten */
+	int PHIL_AMOUNT = 5;		/* number of philosophers */
+	int MAX_RUNS = 50;			/* in total how often is eaten */
 	
 	sf::Vector2f				tablePos;		/* temp */
 	float						tableRadius;	/* temp */
 
 	GameObject					topNode;	/* Top ancestor of all gameobjects */
+	GameObject					topUINode;	/* Top ancestor of all UI elements */
 
 	sf::RenderWindow			mWindow;
 	sf::View					mView;
+
+	//UIManager					mUIManager;
 
 	TextureHolder<std::string>	mTextures;
 	sf::Time					mFrameRateUpdateTime;

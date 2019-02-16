@@ -10,8 +10,8 @@
 class Chopstick;
 class Food;	
 
-#define LEFT		(mId+philAmount-1)%philAmount		/* ID of mId's left neighbor */
-#define RIGHT		(mId+1)%philAmount					/* ID of mId's right neighbor */
+#define P_LEFT		(mId+philAmount-1)%philAmount		/* ID of mId's left neighbor */
+#define P_RIGHT		(mId+1)%philAmount					/* ID of mId's right neighbor */
 #define THINKING	0									/* philosopher is thinking */
 #define	HUNGRY		1									/* philosopher is hungry */
 #define EATING		2									/* philosopher is eating */
@@ -24,8 +24,8 @@ public:
 	void						philosopher(int maxRuns);
 
 private:
-	void						takeForks();
-	void						putForks();
+	void						takeChopsticks();
+	void						putChopsticks();
 	bool						test();
 
 
@@ -49,6 +49,7 @@ private:
 	static int totalRuns;
 
 	Food* mFood;
+	const TextureHolder<std::string> &mth;
 
 	static std::mutex diningMtx;
 	static std::condition_variable cv;
