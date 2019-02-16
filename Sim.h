@@ -32,7 +32,7 @@ private:
 	void						loadTextures();
 	void						buildScene();
 
-	void						startSim();						
+	void						startSim();			
 
 private:
 	std::vector<Philosopher*>	philosophers;
@@ -42,7 +42,7 @@ private:
 
 	/* Settings of the simulation */
 	int PHIL_AMOUNT = 5;		/* number of philosophers */
-	int MAX_RUNS = 50;			/* in total how often is eaten */
+	int MAX_RUNS = 10;			/* in total how often is eaten */
 	
 	sf::Vector2f				tablePos;		/* temp */
 	float						tableRadius;	/* temp */

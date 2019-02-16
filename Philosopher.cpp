@@ -19,32 +19,32 @@ void Philosopher::philosopher(int maxRuns)
 	{
 		// TODO: Add randomness to sleep function
 		std::this_thread::sleep_for(std::chrono::seconds(3));	/* philosopher is thinking */
-		takeChopsticks();											/* aquire two chopsticks or block */
+		takeChopsticks();										/* aquire two chopsticks or block */
 		std::this_thread::sleep_for(std::chrono::seconds(4));	/* yum-yum, spaghetti */
-		putChopsticks();												/* put chopsticks back on table */
+		putChopsticks();										/* put chopsticks back on table */
 	}
 	return;
 }
 
 void Philosopher::takeChopsticks()
 {
-	std::unique_lock<std::mutex> lock(diningMtx);					/* enter critical region */
+	std::unique_lock<std::mutex> lock(diningMtx);		/* enter critical region */
 	state[mId] = HUNGRY;
 	std::cout << "Philosopher " << mId << " is now hungry\n";
 
-	while (!test())				/* loop until chopsticks are available for grab */
-		cv.wait(lock);			/* sleep until someone has finished eating */
+	while (!test())										/* loop until chopsticks are available for grab */
+		cv.wait(lock);									/* sleep until someone has finished eating */
 
-	lock.unlock();				/* exit critical region */
+	lock.unlock();										/* exit critical region */
 }
 
 void Philosopher::putChopsticks()
 {
-	std::unique_lock<std::mutex> lock(diningMtx);				/* enter critical region */
-	state[mId] = THINKING;									/* philosopher has finished eating */
+	std::unique_lock<std::mutex> lock(diningMtx);		/* enter critical region */
+	state[mId] = THINKING;								/* philosopher has finished eating */
 	std::cout << "Philosopher " << mId << " is now thinking\n";
 	totalRuns++;
-	cv.notify_all();		/* notify philosophers waiting, and exit critical region */
+	cv.notify_all();									/* notify philosophers waiting, and exit critical region */
 }
 
 bool Philosopher::test()
@@ -58,6 +58,7 @@ bool Philosopher::test()
 	return false;
 }
 
+/* This is for the simulation part */
 void Philosopher::updateCurrent(float dt)
 {
 	if (lastState != state[mId])	/* If state of philosopher has changed since last check */
