@@ -15,7 +15,7 @@ Key question:
 Can you write a program for each philosopher that does what it
 is supposed to do and never get stuck?
 
-Pseudocode from figure 2-47
+Pseudocode from figure 2-47, "Modern Operating Systems (4th ed.)", Tanenbaum
 */
 
 #include <pthread.h>

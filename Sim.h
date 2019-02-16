@@ -42,7 +42,7 @@ private:
 
 	/* Settings of the simulation */
 	int PHIL_AMOUNT = 5;		/* number of philosophers */
-	int MAX_RUNS = 10;			/* in total how often is eaten */
+	int MAX_RUNS = 100;			/* in total how often is eaten */
 	
 	sf::Vector2f				tablePos;		/* temp */
 	float						tableRadius;	/* temp */

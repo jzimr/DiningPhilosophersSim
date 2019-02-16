@@ -85,7 +85,6 @@ void Sim::loadTextures()
 	mTextures.load("PhilEating", "Media/eating.png");
 	mTextures.load("PhilHungry", "Media/hungry.png");
 	mTextures.load("Food", "Media/food.png");
-	mTextures.load("Background", "Media/background.jpg");
 }
 
 void Sim::buildScene()
@@ -94,13 +93,7 @@ void Sim::buildScene()
 	Set up scene
 	*/
 
-	//SpriteNode* background = new SpriteNode(mTextures.get("Background"));
-	//background->setPosition(RESOLUTION_X / 2.f, RESOLUTION_Y / 2.f);
-	//topNode.attachChild(background);
-
-	/*
-	Two seperate for loops so the drawing is in correct order (chopsticks ontop of food)
-	*/
+	/* Two seperate for loops so the drawing is in correct order (chopsticks ontop of food) */
 	for (int i = 0; i < PHIL_AMOUNT; i++)
 	{
 		float degree = i * (360.f / PHIL_AMOUNT);
