@@ -1,4 +1,4 @@
-# DiningPhilosophersSim
+# DiningPhilosophersSim (janzim @NTNU)
 A small graphical simulation on the "Dining Philosophers" problem solved using SFML.
 
 ![](Github-files/showcase.gif)
